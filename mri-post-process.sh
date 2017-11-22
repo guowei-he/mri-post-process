@@ -21,6 +21,8 @@ err() { echo "$@" 1>&2; exit 1; }
 # Global variables
 outbase="/Users/user/Desktop/output"
 converter="/Users/user/Desktop/dcm2niix"
+remote_host="remotehost"
+remote_base_path="remotepath"
 
 main() {
   # Check input
@@ -28,8 +30,12 @@ main() {
     err "Usage: mri-post-process.sh dcm-folder"
   fi
   in="$1"
+  base="$(basename ${in})"
   if [[ ! -d "${in}" ]]; then
     err "Error: Input ${in} does not exist."
+  fi
+  if [[ ! "${in}" = /* ]]; then
+    err "Error: Input ${in} has to be absolute path."
   fi
 
   # Check global variables
@@ -39,14 +45,17 @@ main() {
   if [[ ! -d "${outbase}" ]]; then
     err "Error: Output base dir ${outbase} does not exist."
   fi
-  out="${outbase}/$(basename ${in})"
+  out="${outbase}/${base}"
   if [[ -d "${out}" ]]; then
     err "Error: Output dir ${out} already exists! Make sure you are not overwriting."
   else
     mkdir ${out}
   fi
+
   # Convert the file
+  ${converter} -o ${out} -b n ${in}
   # Transfer the file
+  echo "rsync -ranv ${out} ${remote_host}:${remote_base_path}/${base}"
 }
 
 main "$@"
