@@ -8,6 +8,8 @@
 # Notice:
 #   This script is expected to be called by automator, and to 'batch'
 #   The log, by default in 'batch', will be sent as mails to the user.
+#   This script relies on dcm2niix to generate nii files ONLY.
+#   All files uploaded to remote server should be HIPPA Compliant.
 #
 # Prerequisite:
 #   1. dcm2niix converter
