@@ -49,13 +49,12 @@ main() {
   if [[ -d "${out}" ]]; then
     err "Error: Output dir ${out} already exists! Make sure you are not overwriting."
   else
-    mkdir ${out}
+    cp -r ${in} ${out}
   fi
 
   # Convert the file
-  ${converter} -o ${out} -b n ${in}
-  # Transfer the file
-  echo "rsync -ranv ${out} ${remote_host}:${remote_base_path}/${base}"
+  find ${out} -name "*.IMA" | xargs -I {} dirname {} | sort -u | xargs -I {} ${converter} -b y -z n {}
+  find ${out} -name "*.IMA" -delete
 }
 
 main "$@"
