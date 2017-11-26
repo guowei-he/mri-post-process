@@ -47,14 +47,19 @@ main() {
   fi
   out="${outbase}/${base}"
   if [[ -d "${out}" ]]; then
-    err "Error: Output dir ${out} already exists! Make sure you are not overwriting."
+    err "Error: Output dir ${out} already exists! Make sure you are not overwriting. If sure, delete it and continue."
   else
-    cp -r ${in} ${out}
+    mkdir -p ${out}
+  fi
+
+  if [[ ! -d "${out}" ]]; then
+    err "Error: Failed to create ${out}."
   fi
 
   # Convert the file
-  find ${out} -name "*.IMA" | xargs -I {} dirname {} | sort -u | xargs -I {} ${converter} -b y -z n {}
-  find ${out} -name "*.IMA" -delete
+  cd ${in}
+  find ./ -name "*.IMA" | xargs -I {} dirname {} | sort -u | xargs -I {}  mkdir -p ${out}/{}
+  find ./ -name "*.IMA" | xargs -I {} dirname {} | sort -u | xargs -I {}  ${converter} -b y -z n -o ${out}/{} {}
 }
 
 main "$@"
