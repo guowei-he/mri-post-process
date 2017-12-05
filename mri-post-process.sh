@@ -21,8 +21,6 @@ err() { echo "$@" 1>&2; exit 1; }
 # Global variables
 outbase="/Users/user/Desktop/output"
 converter="/Users/user/Desktop/dcm2niix"
-remote_host="remotehost"
-remote_base_path="remotepath"
 
 main() {
   # Check input
